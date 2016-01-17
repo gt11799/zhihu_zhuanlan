@@ -20,10 +20,20 @@ class Wujun(Model):
     title = peewee.CharField()
     titleImage = peewee.CharField()
     date = peewee.CharField()
-    likesCount = peewee.CharField()
-    commentsCount = peewee.CharField()
+    likesCount = peewee.IntegerField()
+    commentsCount = peewee.IntegerField()
     url = peewee.CharField()
-    created = peewee.CharField()
-    updated = peewee.CharField()
+    created = peewee.DateTimeField()
+    updated = peewee.DateTimeField()
+
+    @classmethod
+    def get_max_code(cls):
+        wujun = cls.select(cls.code).order_by(
+            cls.code.desc()
+        ).limit(1)
+        if not wujun:
+            return 0
+        return wujun.get().code
+
 
 database.connect()
