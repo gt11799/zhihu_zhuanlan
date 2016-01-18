@@ -1,15 +1,19 @@
 #! coding:utf-8
 import json
-from flask import Flask, request
+from flask import Flask, request, render_template, url_for, redirect
 
 from model import Wujun
 from sign import check_sign
+from settings import DEBUG
+
 
 app = Flask(__name__)
+app.debug = DEBUG
 
 
 @app.route("/")
 def index():
+    return redirect(url_for("get_docs"))
     return "work in process"
 
 
@@ -48,7 +52,7 @@ def test_sign():
 
 @app.route("/docs", methods=['GET'])
 def get_docs():
-    return
+    return render_template("docs.html")
 
 
 if __name__ == "__main__":
