@@ -8,6 +8,7 @@ from datetime import datetime
 import requests
 from pymongo import MongoClient
 from qiniu import Auth, BucketManager
+from handle_data import cron_run
 from settings import QINIU_AK, QINIU_SK
 
 client = MongoClient('localhost', 27017)
@@ -63,6 +64,7 @@ def cron_get_posts():
                 save_post(post)
         offset += limit
         sleep(60)
+    cron_run()
 
 
 def save_post(post):
