@@ -35,5 +35,10 @@ class Wujun(Model):
             return 0
         return wujun.get().code
 
+    @classmethod
+    def get_new_articles(cls, last_id, page=0, per_page=30):
+        return cls.select().where(
+            cls.id > last_id).paginate(page, per_page)
+
 
 database.connect()
