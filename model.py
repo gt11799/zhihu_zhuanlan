@@ -36,9 +36,15 @@ class Wujun(Model):
         return wujun.get().code
 
     @classmethod
-    def get_new_articles(cls, last_id, page=0, per_page=30):
+    def get_articles(cls, last_id, page=0, per_page=30):
         return cls.select().where(
             cls.id > last_id).paginate(page, per_page)
+
+    @classmethod
+    def get_new_articles_by_month(cls, month, last_id):
+        return cls.select().where(
+            cls.id > last_id,
+            cls.date.startswith("2015%02d" % month))
 
 
 database.connect()

@@ -1,6 +1,7 @@
 # coding: utf-8
-import hashlib
 import time
+import hmac
+import hashlib
 
 from settings import TOKEN, TIMEOUT
 from log import logger
@@ -19,9 +20,6 @@ def check_sign(timestamp, sign):
     return False, "sign error"
 
 
-def gen_sign(timestamp):
-    md = hashlib.sha1(str(timestamp) + TOKEN)
-    first_level = md.hexdigest()
-    md = hashlib.sha1(first_level + TOKEN)
-    sign_gen = md.hexdigest()
-    return sign_gen[:10]
+def gen_sign(date, body):
+    obj = hmac.new(TOKEN, date + body, hashlib.sha1)
+    return obj.hexdigest()

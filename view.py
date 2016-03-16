@@ -3,8 +3,8 @@ import json
 from flask import Flask, request, render_template, url_for, redirect
 
 from model import Wujun
-from sign import check_sign
-from settings import DEBUG
+from sign import gen_sign
+from settings import DEBUG, TOKEN
 
 
 app = Flask(__name__)
@@ -19,11 +19,10 @@ def index():
 
 @app.route("/articles", methods=['GET'])
 def get_articles():
-    page = int(request.args.get("page", 0))
-    per_page = int(request.args.get("per_page", 30))
+    month = int(request.args.get("month", 1))
     last_id = int(request.args.get("last_id", 0))
 
-    articles = Wujun.get_new_articles(last_id, page, per_page)
+    articles = Wujun.get_new_articles_by_month(month, last_id)
     return json.dumps(map(article_field, articles))
 
 
@@ -39,15 +38,18 @@ def article_field(article):
     }
 
 
-@app.route("/test_sign", methods=['GET'])
+@app.route("/test_sign", methods=['GET', 'POST'])
 def test_sign():
-    timestamp = request.args.get("t")
-    sign = request.args.get("s")
-    passed, error = check_sign(timestamp, sign)
-    if passed:
-        return "success!"
+    date = request.headers.get('Date') or ""
+    body = request.data or ""
+    values = request.values
+    authorization = request.headers.get('Authorization')
+    sign = gen_sign(date, body)
+    if authorization == sign:
+        result = "success"
     else:
-        return error
+        result = "fail"
+    return render_template("test_sign.html", token=TOKEN, **locals())
 
 
 @app.route("/docs", methods=['GET'])
