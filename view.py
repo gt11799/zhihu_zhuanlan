@@ -28,7 +28,7 @@ def get_articles():
 
 def article_field(article):
     return {
-        "id": article.id,
+        "articleId": article.id,
         "title": article.title,
         "titleImage": article.titleImage,
         "commentsCount": article.commentsCount,
