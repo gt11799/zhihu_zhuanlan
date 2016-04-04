@@ -2,6 +2,7 @@
 import time
 import hmac
 import hashlib
+import base64
 
 from settings import TOKEN, TIMEOUT
 from log import logger
@@ -20,6 +21,19 @@ def check_sign(timestamp, sign):
     return False, "sign error"
 
 
-def gen_sign(date, body):
-    obj = hmac.new(TOKEN, date + body, hashlib.sha1)
+def gen_sign(body):
+    obj = hmac.new(TOKEN, body, hashlib.sha1)
     return obj.hexdigest()
+
+
+def get_sort_string(data, date):
+    data = sorted(data.items(), cmp=lambda x, y: cmp(x[0], y[0]))
+    string = "".join(["%s=%s" % (_[0], _[1]) for _ in data])
+    string_hash = base64.b64encode(get_hash(string))
+    return string_hash + '\n' + date
+
+
+def get_hash(string):
+    m = hashlib.md5()
+    m.update(string)
+    return m.hexdigest()

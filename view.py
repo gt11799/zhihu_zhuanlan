@@ -1,9 +1,12 @@
 #! coding:utf-8
+import time
 import json
+import base64
+import hashlib
 from flask import Flask, request, render_template, url_for, redirect
 
 from model import Wujun
-from sign import gen_sign
+from sign import gen_sign, get_hash
 from settings import DEBUG, TOKEN
 
 
@@ -23,7 +26,11 @@ def get_articles():
     last_id = int(request.args.get("last_id", 0))
 
     articles = Wujun.get_new_articles_by_month(month, last_id)
-    return json.dumps(map(article_field, articles))
+    result = {
+        "lastUpdate": int(time.time()),
+        "data": map(article_field, articles)
+    }
+    return json.dumps(result)
 
 
 def article_field(article):
@@ -42,9 +49,13 @@ def article_field(article):
 def test_sign():
     date = request.headers.get('Date') or ""
     body = request.data or ""
-    values = request.values
+    params = request.args
+    data = sorted(params.items(), cmp=lambda x, y: cmp(x[0], y[0]))
+    string = "".join(["%s=%s" % (_[0], _[1]) for _ in data])
+    string_hash = base64.b64encode(get_hash(string))
+    string_done = string_hash + '\n' + date
     authorization = request.headers.get('Authorization')
-    sign = gen_sign(date, body)
+    sign = gen_sign(string)
     if authorization == sign:
         result = "success"
     else:
