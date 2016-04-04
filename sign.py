@@ -23,7 +23,7 @@ def check_sign(timestamp, sign):
 
 def gen_sign(body):
     obj = hmac.new(TOKEN, body, hashlib.sha1)
-    return obj.hexdigest()
+    return base64.b64encode(obj.hexdigest())
 
 
 def get_sort_string(data, date):
