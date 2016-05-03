@@ -3,22 +3,30 @@ import time
 import hmac
 import hashlib
 import base64
+from functools import wraps
+from flask import Response, request
 
-from settings import TOKEN, TIMEOUT
 from log import logger
+from settings import TOKEN, TIMEOUT
 
 
-def check_sign(timestamp, sign):
-    if not timestamp or not sign:
-        return False, "arguments lost"
-    delta = int(time.time()) - int(timestamp)
-    logger.info(delta)
-    if delta < -1 or delta > TIMEOUT:
-        return False, "timeout"
-    sign_gen = gen_sign(timestamp)
-    if sign_gen == sign:
-        return True, ""
-    return False, "sign error"
+def check_sign(view_func):
+    @wraps(view_func)
+    def _(*args, **kwargs):
+        date = request.headers.get('Date') or ""
+        authorization = request.headers.get('Authorization')
+        if authorization is None:
+            return Response(status=401)
+        params = request.args.to_dict()
+        forms = request.form.to_dict()
+        params.update(forms)
+        string = get_sort_string(params, date)
+        sign = gen_sign(string)
+
+        if authorization != sign:
+            return Response(status=403)
+        return view_func(*args, **kwargs)
+    return _
 
 
 def gen_sign(body):

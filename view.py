@@ -3,15 +3,17 @@ import time
 import json
 import base64
 import hashlib
-from flask import Flask, request, render_template, url_for, redirect
+from flask import Flask, request, render_template, url_for, redirect, Blueprint
 
 from model import Wujun
-from sign import gen_sign, get_hash
+from sign import check_sign
 from settings import DEBUG, TOKEN
 
 
 app = Flask(__name__)
 app.debug = DEBUG
+
+bp = Blueprint("main", __name__, url_prefix=None)
 
 
 @app.route("/")
@@ -21,6 +23,7 @@ def index():
 
 
 @app.route("/articles", methods=['GET'])
+@check_sign
 def get_articles():
     month = int(request.args.get("month", 1))
     last_id = int(request.args.get("last_id", 0))
@@ -28,7 +31,7 @@ def get_articles():
     articles = Wujun.get_new_articles_by_month(month, last_id)
     result = {
         "lastUpdate": int(time.time()),
-        "data": map(article_field, articles)
+        "articles": map(article_field, articles)
     }
     return json.dumps(result)
 
