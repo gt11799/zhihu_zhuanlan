@@ -4,7 +4,7 @@ import json
 import traceback
 from flask import Flask, request, current_app, g, render_template
 
-from settings import DEBUG
+from settings import DEBUG, LOG_PATH
 from view import bp as main_bp
 
 
@@ -72,8 +72,7 @@ def init_logging(app):
     if not app.debug and not app.config['TESTING']:
         import logging
         import logging.config
-        logging_path = app.config.get('LOGGING_PATH')
-        LOGGING_CONFIG['handlers']['file']['filename'] = logging_path
+        LOGGING_CONFIG['handlers']['file']['filename'] = LOG_PATH
         logging.config.dictConfig(LOGGING_CONFIG)
     else:
         import logging
