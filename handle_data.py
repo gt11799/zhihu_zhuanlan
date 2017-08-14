@@ -72,7 +72,7 @@ def first_run():
     per = 50
     for start in range(count + per)[::per]:
         logger.info("run start: %s" % start)
-        handle_data(start, per)
+        handle_data({}, start, per)
 
 
 def cron_run():
@@ -86,4 +86,4 @@ def cron_run():
 
 
 if __name__ == '__main__':
-    cron_run()
+    first_run()
