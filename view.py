@@ -1,6 +1,6 @@
 #! coding:utf-8
 import time
-from flask import request, render_template, url_for, redirect, Blueprint, jsonify
+from flask import request, url_for, redirect, Blueprint, jsonify
 
 from model import Wujun
 
@@ -8,10 +8,9 @@ from model import Wujun
 bp = Blueprint("main", __name__, url_prefix=None)
 
 
-@bp.route("/")
+@bp.route("/", methods=['GET'])
 def index():
-    return redirect(url_for("get_docs"))
-    return "work in process"
+    return redirect(url_for('main.get_articles'))
 
 
 @bp.route("/articles", methods=['GET'])
@@ -37,8 +36,3 @@ def article_field(article):
         "url": article.url,
         "date": article.date
     }
-
-
-@bp.route("/docs", methods=['GET'])
-def get_docs():
-    return render_template("docs.html")

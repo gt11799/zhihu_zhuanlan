@@ -2,7 +2,6 @@
 
 import peewee
 
-from settings import DB_USER, DB_PASSWD
 
 database = peewee.SqliteDatabase("zhuanlan.db")
 
