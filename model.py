@@ -4,8 +4,7 @@ import peewee
 
 from settings import DB_USER, DB_PASSWD
 
-database = peewee.MySQLDatabase("zhuanlan", host="localhost", user=DB_USER,
-                                passwd=DB_PASSWD)
+database = peewee.SqliteDatabase("zhuanlan.db")
 
 
 class Model(peewee.Model):

@@ -29,7 +29,7 @@ LOGGING_CONFIG = {
             'class': 'logging.FileHandler',
             'level': 'WARNING',
             'formatter': 'file_format',
-            'filename': '/tmp/falcon.log',
+            'filename': '/tmp/zhihu.log',
         },
     },
     'loggers': {
@@ -83,10 +83,9 @@ def init_logging(app):
 def _request_log(resp, *args, **kws):
     current_app.logger.info(
         '%s request: [%s] %s, url: %s, '
-        'account: %s, args: %s, form: %s, json: %s',
+        'args: %s, form: %s, json: %s',
         request.remote_addr,
         resp.status, request.method, request.url,
-        g.account.id if g.account else 'None',
         request.args,
         request.form,
         request.get_json(silent=True))

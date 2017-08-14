@@ -14,14 +14,20 @@ def check_sign(view_func):
     @wraps(view_func)
     def _(*args, **kwargs):
         date = request.headers.get('Date') or ""
+        print "date: %s" % date
         authorization = request.headers.get('Authorization')
         if authorization is None:
             return Response(status=401)
+        print "authorization: %s" % authorization
         params = request.args.to_dict()
+        print "params: %s" % str(params)
         forms = request.form.to_dict()
+        print "forms: %s" % str(forms)
         params.update(forms)
         string = get_sort_string(params, date)
+        print "string: %s" % string
         sign = gen_sign(string)
+        print "sign: %s" % sign
 
         if authorization != sign:
             return Response(status=403)
@@ -37,6 +43,8 @@ def gen_sign(body):
 def get_sort_string(data, date):
     data = sorted(data.items(), cmp=lambda x, y: cmp(x[0], y[0]))
     string = "".join(["%s=%s" % (_[0], _[1]) for _ in data])
+    string = string.lower()
+    print "string sorted %s" % string
     string_hash = base64.b64encode(get_hash(string))
     return string_hash + '\n' + date
 

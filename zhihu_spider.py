@@ -18,7 +18,12 @@ q = Auth(QINIU_AK, QINIU_SK)
 BUCKET_NAME = 'wujunzhuanlan'
 bucket = BucketManager(q)
 
-POST_LIST_URL = "http://zhuanlan.zhihu.com/api/columns/wujun/posts?limit=%s&offset=%s"
+HEADER = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 '
+    '(KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
+}
+
+POST_LIST_URL = "https://zhuanlan.zhihu.com/api/columns/wujun/posts?limit=%s&offset=%s"
 QINIU_HOST = 'http://7xpxh4.com1.z0.glb.clouddn.com'
 
 
@@ -26,7 +31,7 @@ def first_get_posts():
     limit = 100
     offset = 0
     while True:
-        resp = requests.get(POST_LIST_URL % (limit, offset))
+        resp = requests.get(POST_LIST_URL % (limit, offset), headers=HEADER)
         if resp.status_code != 200:
             print resp.data
             print "get wrong"
@@ -45,9 +50,10 @@ def cron_get_posts():
     limit = 10
     offset = 0
     while True:
-        resp = requests.get(POST_LIST_URL % (limit, offset))
+        resp = requests.get(POST_LIST_URL % (limit, offset), headers=HEADER)
         if resp.status_code != 200:
-            print resp.data
+            print resp.status_code
+            print resp.text
             print "get wrong, http not 200"
             break
         posts = resp.json()
@@ -81,5 +87,6 @@ def upload_image(url):
 
 if __name__ == '__main__':
     print "%s start scripts" % str(datetime.now())
-    cron_get_posts()
+    # cron_get_posts()
+    first_get_posts()
     print "%s end scripts" % str(datetime.now())
