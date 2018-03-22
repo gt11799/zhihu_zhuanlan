@@ -26,6 +26,19 @@ def get_articles():
     return jsonify(result)
 
 
+@bp.route("/articles/images", methods=['GET'])
+def get_article_images():
+    month = int(request.args.get("month", 1))
+    last_id = int(request.args.get("last_id", 0))
+
+    articles = Wujun.get_new_articles_by_month(month, last_id)
+    result = {
+        "lastUpdate": int(time.time()),
+        "images": [_.titleImage for _ in articles],
+    }
+    return jsonify(result)
+
+
 def article_field(article):
     return {
         "articleId": article.id,
