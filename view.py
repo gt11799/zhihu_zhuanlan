@@ -39,6 +39,11 @@ def get_article_images():
     return jsonify(result)
 
 
+@bp.route("/_internal/health")
+def health():
+    return jsonify(request.headers)
+
+
 def article_field(article):
     return {
         "articleId": article.id,
