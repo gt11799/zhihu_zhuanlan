@@ -41,7 +41,8 @@ def get_article_images():
 
 @bp.route("/_internal/health")
 def health():
-    return jsonify(request.headers)
+    result = dict([(key, str(value)) for key, value in request.headers.items()])
+    return jsonify(result)
 
 
 def article_field(article):
