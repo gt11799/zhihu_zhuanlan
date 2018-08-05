@@ -19,17 +19,17 @@
 
 ## 签名过程
 
-- 把要请求的参数，加上当前的时间戳(integer, 单位是秒，java出来的是毫秒，需要转换)，组成一个字典(map), 时间戳的key是`ts`
+1. 把要请求的参数，加上当前的时间戳(integer, 单位是秒，java出来的是毫秒，需要转换)，组成一个字典(map), 时间戳的key是`ts`
     - 比如要请求的参数是`{"last_id": 1, "month": 2}`
     - 增加ts后，变成`{"last_id": 1, "month": 2, "ts": 1533461609}`
-- 把字典按照key排序, 然后按照`key=value&key=value`拼接起来
+1. 把字典按照key排序, 然后按照`key=value&key=value`拼接起来
     - 字典一般是无序的，通常需要转换为列表(数组)
     - 在Python中，一般排序后转换为列表套元组(不可变数组)的形式。`[('last_id', 1), ('month', 2), 'ts': 1533461609]`
     - 上述排序好的列表，再组装起来，得到字符串`last_id=12&month=1&ts=1533461609`
-- 把字符串当做message，加上secret_key作为key，算法使用hmac计算散列值，取16进制的结果(通常方法名类似`hexdigest`)
+1. 把字符串当做message，加上secret_key作为key，算法使用hmac计算散列值，取16进制的结果(通常方法名类似`hexdigest`)
     - 可以参考[这个网站](https://1024tools.com/hmac), 里面的结果1
     - java直接hmac出来的通常是个二进制数组，所以要找到方法，取出16进制。可以[参考这里](https://stackoverflow.com/questions/3208160/how-to-generate-an-hmac-in-java-equivalent-to-a-python-example)的答案2，`Hex.encodeHexString`
-- token需要指定类型，写死`Bearer`，上述得到的token，拼起来就是`Bearer bfc8a6040324391f162a43ebc5694b7c0119b7ad`
+1. token需要指定类型，写死`Bearer`，上述得到的token，拼起来就是`Bearer bfc8a6040324391f162a43ebc5694b7c0119b7ad`
 
 ## 发出请求
 
