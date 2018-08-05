@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
+ipython = "==5.*"
 
 [packages]
 peewee = ">=2.8.0"

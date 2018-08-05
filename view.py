@@ -13,28 +13,37 @@ def index():
     return redirect(url_for('main.get_articles'))
 
 
+@bp.route("/months", methods=['GET'])
+def gets_month():
+    item = Wujun.get_max_date()
+    if not item:
+        return jsonify(data=[], lastUpdate=int(time.time()))
+    month = int(item.date[4:6])
+    return jsonify(data=range(month + 1), lastUpdate=int(time.time()))
+
+
 @bp.route("/articles", methods=['GET'])
-def get_articles():
-    month = int(request.args.get("month", 1))
+def gets_article():
+    month = int(request.args.get("month", 0))
     last_id = int(request.args.get("last_id", 0))
 
     articles = Wujun.get_new_articles_by_month(month, last_id)
     result = {
         "lastUpdate": int(time.time()),
-        "articles": map(article_field, articles)
+        "data": map(article_field, articles)
     }
     return jsonify(result)
 
 
-@bp.route("/articles/images", methods=['GET'])
-def get_article_images():
+@bp.route("/article/images", methods=['GET'])
+def gets_article_image():
     month = int(request.args.get("month", 1))
     last_id = int(request.args.get("last_id", 0))
 
     articles = Wujun.get_new_articles_by_month(month, last_id)
     result = {
         "lastUpdate": int(time.time()),
-        "images": [_.titleImage for _ in articles],
+        "data": [_.titleImage for _ in articles],
     }
     return jsonify(result)
 
