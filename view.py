@@ -2,6 +2,7 @@
 import time
 from flask import request, url_for, redirect, Blueprint, jsonify
 
+from sign import check_sign
 from model import Wujun
 
 
@@ -36,6 +37,7 @@ def gets_article():
 
 
 @bp.route("/article/images", methods=['GET'])
+@check_sign
 def gets_article_image():
     month = int(request.args.get("month", 1))
     last_id = int(request.args.get("last_id", 0))
@@ -52,6 +54,21 @@ def gets_article_image():
 def health():
     result = dict([(key, str(value)) for key, value in request.headers.items()])
     return jsonify(result)
+
+
+@bp.route("/_internal/sign_test")
+def test_sign():
+    from sign import *
+    import json
+    ts = request.headers.get('X-TS')
+    qs = request.args.to_dict()
+    data = copy(qs)
+    data['ts'] = ts
+    string = sort_query_string(data)
+    token = 'Bearer %s' % generate_token(string)
+    token_given = request.headers.get('Authorization')
+    data = dict(ts=ts, qs=qs, to_sign_data=data, to_sign_string=string, token=token, token_given=token_given)
+    return jsonify(data=data)
 
 
 def article_field(article):
