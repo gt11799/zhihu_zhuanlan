@@ -19,7 +19,7 @@ def gets_month():
     if not item:
         return jsonify(data=[], lastUpdate=int(time.time()))
     month = int(item.date[4:6])
-    return jsonify(data=range(month + 1), lastUpdate=int(time.time()))
+    return jsonify(data=range(1, month + 1), lastUpdate=int(time.time()))
 
 
 @bp.route("/articles", methods=['GET'])
