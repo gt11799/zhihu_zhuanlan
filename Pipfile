@@ -8,8 +8,9 @@ ipython = "==5.*"
 
 [packages]
 peewee = ">=2.8.0"
-flask = "*"
 gunicorn = "*"
+gevent = "*"
+Flask = "*"
 
 [requires]
 python_version = "2.7"

@@ -1,0 +1,9 @@
+bind = "0.0.0.0:5100"
+workers = 2
+worker_class = "gevent"
+max_requests = 1024
+loglevel = 'info'
+daemon = False
+graceful_timeout = 5
+capture_output = True
+errorlog = "-"
