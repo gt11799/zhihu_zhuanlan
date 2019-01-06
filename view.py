@@ -11,7 +11,7 @@ bp = Blueprint("main", __name__, url_prefix=None)
 
 @bp.route("/", methods=['GET'])
 def index():
-    return redirect(url_for('main.get_articles'))
+    return redirect(url_for('main.gets_article'))
 
 
 @bp.route("/months", methods=['GET'])
