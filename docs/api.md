@@ -45,7 +45,7 @@
 | 参数名     | 是否必填    | 说明                         |
 |-----------|------------|----------------------       |
 | month     | 否         | 月份，不传则是全部的数据        |
-| last_id   | 否         | 本地数据中最大的articleId      |
+| last_update | 否       | 本地数据中最大的更新时间，格式是时间戳   |
 
 正常时返回
 
@@ -59,6 +59,7 @@
             "likesCount": 8,
             "title": "《文明之光》之《发明365》-1月29日，椅子的发明",
             "titleImage": "http://7xpxh4.com1.z0.glb.clouddn.com/8c25d0a6-80f9-11e7-8c5a-28cfe91ed6bd",
+            "updated": 1502722063,
             "url": "http://zhuanlan.zhihu.com/p/19945855"
         },
         {
@@ -68,6 +69,7 @@
             "likesCount": 15,
             "title": "​《文明之光》之《发明365#》1月30日- 盛器的发明（1）－陶器",
             "titleImage": "http://7xpxh4.com1.z0.glb.clouddn.com/8c10871c-80f9-11e7-a6df-28cfe91ed6bd",
+            "updated": 1502722063,
             "url": "http://zhuanlan.zhihu.com/p/19945880"
         },
         {
@@ -77,6 +79,7 @@
             "likesCount": 11,
             "title": "​《文明之光》之《发明365》1月31日， 盛器的发明（2）－上釉的发明",
             "titleImage": "http://7xpxh4.com1.z0.glb.clouddn.com/8bd9439e-80f9-11e7-b253-28cfe91ed6bd",
+            "updated": 1502722063,
             "url": "http://zhuanlan.zhihu.com/p/19946491"
         }
     ],

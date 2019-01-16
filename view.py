@@ -15,6 +15,7 @@ def index():
 
 
 @bp.route("/months", methods=['GET'])
+@check_sign
 def gets_month():
     item = Wujun.get_max_date()
     if not item:
@@ -24,11 +25,12 @@ def gets_month():
 
 
 @bp.route("/articles", methods=['GET'])
+# @check_sign
 def gets_article():
     month = int(request.args.get("month", 0))
-    last_id = int(request.args.get("last_id", 0))
+    last_update = int(request.args.get("last_update", 0))
 
-    articles = Wujun.get_new_articles_by_month(month, last_id)
+    articles = Wujun.get_new_articles_by_month(month, last_update)
     result = {
         "lastUpdate": int(time.time()),
         "data": map(article_field, articles)
@@ -79,5 +81,11 @@ def article_field(article):
         "commentsCount": article.commentsCount,
         "likesCount": article.likesCount,
         "url": article.url,
-        "date": article.date
+        "date": article.date,
+        "updated": datetime_to_timestamp(article.updated),
     }
+
+
+def datetime_to_timestamp(dt):
+    t = dt.timetuple()
+    return time.mktime(t)

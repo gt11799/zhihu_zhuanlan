@@ -46,8 +46,8 @@ class Wujun(Model):
             cls.id > last_id).paginate(page, per_page)
 
     @classmethod
-    def get_new_articles_by_month(cls, month, last_id):
-        query = cls.select().where(cls.id > last_id)
+    def get_new_articles_by_month(cls, month, last_update):
+        query = cls.select().where(cls.updated > last_update)
         if month:
             query = query.where(cls.date.startswith("2015%02d" % month))
         return query
