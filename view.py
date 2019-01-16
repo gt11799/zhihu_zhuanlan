@@ -25,7 +25,7 @@ def gets_month():
 
 
 @bp.route("/articles", methods=['GET'])
-# @check_sign
+@check_sign
 def gets_article():
     month = int(request.args.get("month", 0))
     last_update = int(request.args.get("last_update", 0))
