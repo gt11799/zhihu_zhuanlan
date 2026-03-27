@@ -25,15 +25,10 @@ python3 tools/export_static_site.py
 - `index.html`
 - `style.css`
 - `.nojekyll`
-- `docs/index.html`
-- `docs/style.css`
-- `docs/.nojekyll`
 
 ### 发布到 GitHub Pages
 
 1. 推送分支并合并到默认分支。
 2. 在仓库 Settings → Pages 中选择 `Deploy from a branch`。
-3. 分支选择默认分支，目录可以选：
-   - `/ (root)`：使用仓库根目录的 `index.html`
-   - `/docs`：使用 `docs/index.html`
+3. 分支选择默认分支，目录选择 `/ (root)`。
 4. 等待部署完成后即可通过 GitHub Pages URL 访问。

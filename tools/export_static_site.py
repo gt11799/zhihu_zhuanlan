@@ -10,7 +10,7 @@ from html import escape
 
 ROOT = Path(__file__).resolve().parents[1]
 DB_PATH = ROOT / "zhuanlan.db"
-SITE_DIRS = [ROOT, ROOT / "docs"]
+SITE_DIRS = [ROOT]
 
 STYLE = """
 :root {
