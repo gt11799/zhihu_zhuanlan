@@ -10,8 +10,7 @@ from html import escape
 
 ROOT = Path(__file__).resolve().parents[1]
 DB_PATH = ROOT / "zhuanlan.db"
-INDEX_PATH = ROOT / "index.html"
-STYLE_PATH = ROOT / "style.css"
+SITE_DIRS = [ROOT, ROOT / "docs"]
 
 STYLE = """
 :root {
@@ -230,9 +229,24 @@ def build_html(rows):
 
 def main():
   rows = fetch_articles()
-  INDEX_PATH.write_text(build_html(rows), encoding="utf-8")
-  STYLE_PATH.write_text(STYLE + "\n", encoding="utf-8")
-  print(f"Generated {INDEX_PATH} and {STYLE_PATH} from {DB_PATH}.")
+  html = build_html(rows)
+  css = STYLE + "\n"
+
+  outputs = []
+  for site_dir in SITE_DIRS:
+    site_dir.mkdir(parents=True, exist_ok=True)
+    index_path = site_dir / "index.html"
+    style_path = site_dir / "style.css"
+    nojekyll_path = site_dir / ".nojekyll"
+
+    index_path.write_text(html, encoding="utf-8")
+    style_path.write_text(css, encoding="utf-8")
+    nojekyll_path.write_text("", encoding="utf-8")
+    outputs.extend([index_path, style_path, nojekyll_path])
+
+  print(f"Generated {len(outputs)} files from {DB_PATH}:")
+  for output in outputs:
+    print(f"- {output}")
 
 
 if __name__ == "__main__":
